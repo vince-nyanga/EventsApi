@@ -10,6 +10,9 @@
     <PackageReference Include="nunit" Version="3.12.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.15.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
+    <PackageReference Include="FluentAssertions" Version="5.10.3" />
+    <PackageReference Include="AutoFixture" Version="4.11.0" />
+    <PackageReference Include="AutoFixture.NUnit3" Version="4.11.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -18,4 +21,8 @@
     <ProjectReference Include="..\..\Src\EventsApi.Web\EventsApi.Web.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Core\" />
+    <Folder Include="Core\Entities\" />
+  </ItemGroup>
 </Project>
