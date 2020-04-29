@@ -257,6 +257,9 @@ paket-files/
 *.sqlite
 *.db
 
+*.sqlite-wal
+*.sqlite-shm
+
 # Nuget files
 DeploymentSettings.props
 Directory.Build.props
