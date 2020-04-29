@@ -9,6 +9,8 @@ namespace EventsApi.Web.Profiles
         public TalkProfile()
         {
             CreateMap<Talk, TalkDto>();
+            CreateMap<TalkForUpdateDto, Talk>();
+            CreateMap<Talk, TalkForUpdateDto>();
         }
     }
 }
