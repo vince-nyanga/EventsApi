@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 
 namespace EventsApi.Web
 {
@@ -27,7 +28,6 @@ namespace EventsApi.Web
         
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddAutoMapper(typeof(Startup));
             services.AddMvc(options=>options.EnableEndpointRouting=false);
 
             services.AddDbContext<AppDbContext>(optionsAction =>
@@ -36,6 +36,15 @@ namespace EventsApi.Web
             });
 
             services.AddMediatR(typeof(Startup));
+            services.AddAutoMapper(typeof(Startup));
+            services.AddSwaggerGen(setupAction =>
+            {
+                setupAction.SwaggerDoc("TalksOpenAPISpecification", new OpenApiInfo()
+                {
+                    Title = "Talks API",
+                    Version = "1"
+                });
+            });
         }
 
         public void ConfigureContainer(ContainerBuilder builder)
@@ -49,6 +58,17 @@ namespace EventsApi.Web
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(setupAction =>
+            {
+                setupAction.SwaggerEndpoint(
+                     "/swagger/TalksOpenAPISpecification/swagger.json",
+                     "Talks API");
+
+                setupAction.RoutePrefix = "";
+            });
 
             app.UseMvc();
         }
