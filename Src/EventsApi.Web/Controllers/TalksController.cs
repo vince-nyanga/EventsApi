@@ -7,6 +7,7 @@ using EventsApi.Web.Models.Talks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace EventsApi.Web.Controllers
 {
@@ -58,7 +59,7 @@ namespace EventsApi.Web.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status201Created)]
-        public async Task<ActionResult<TalkDto>> Post([FromBody] TalkToUpdateDto talk)
+        public async Task<ActionResult<TalkDto>> Post([FromBody] TalkForUpdateDto talk)
         {
             _logger.LogInformation("Creating new talk");
 
@@ -77,7 +78,7 @@ namespace EventsApi.Web.Controllers
         [HttpPut("{id:int}")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> Put(int id,[FromBody] TalkToUpdateDto talk)
+        public async Task<ActionResult> Put(int id,[FromBody] TalkForUpdateDto talk)
         {
             _logger.LogInformation("Updating talk with id {0}", id);
 
@@ -98,6 +99,43 @@ namespace EventsApi.Web.Controllers
 
             return NoContent();
         }
+
+        [HttpPatch("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> Patch(int id,
+            [FromBody]JsonPatchDocument<TalkForUpdateDto> patchDocument)
+        {
+            _logger.LogInformation("Updating talk with id {0}", id);
+
+            var talkEntity = await _repository.GetByIdAsync<Talk>(id);
+
+            if (talkEntity == null)
+            {
+                _logger.LogInformation("Talk with id {0} does not exist", id);
+                return NotFound();
+            }
+
+            var talkToPatch = _mapper.Map<TalkForUpdateDto>(talkEntity);
+
+            patchDocument.ApplyTo(talkToPatch, ModelState);
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            talkEntity.Title = talkToPatch.Title;
+            talkEntity.Description = talkToPatch.Description;
+            talkEntity.ScheduledDateTime = talkToPatch.ScheduledDateTime;
+
+            await _repository.UpdateAsync(talkEntity);
+
+            _logger.LogInformation("Talk with id {0} was successfully updated", id);
+            return NoContent();
+        }
+
 
         [HttpDelete("{id:int}")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

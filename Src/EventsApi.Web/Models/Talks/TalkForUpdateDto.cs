@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace EventsApi.Web.Models.Talks
 {
-    public class TalkToUpdateDto
+    public class TalkForUpdateDto
     {
         [Required]
         public string Title { get; set; }

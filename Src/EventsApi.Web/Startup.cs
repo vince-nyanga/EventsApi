@@ -28,7 +28,8 @@ namespace EventsApi.Web
         
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc(options=>options.EnableEndpointRouting=false);
+            services.AddMvc(options=>options.EnableEndpointRouting=false)
+                .AddNewtonsoftJson();
 
             services.AddDbContext<AppDbContext>(optionsAction =>
             {
