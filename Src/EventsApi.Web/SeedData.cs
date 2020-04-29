@@ -22,7 +22,7 @@ namespace EventsApi.Web
             Title = "Domain Driven Design",
             Description = "An introduction to domain driven design",
             ScheduledDateTime = DateTimeOffset.UtcNow.AddDays(2),
-            Speaker = Speaker1
+            Speakers = { Speaker1 }
         };
 
 
@@ -31,7 +31,7 @@ namespace EventsApi.Web
             Title = "Developing a web API",
             Description = "An introduction web API",
             ScheduledDateTime = DateTimeOffset.UtcNow.AddDays(3),
-            Speaker = Speaker1
+            Speakers = { Speaker1 }
         };
 
 
