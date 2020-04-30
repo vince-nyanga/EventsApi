@@ -9,20 +9,14 @@ namespace EventsApi.Web
 {
     public static class SeedData
     {
-        public static readonly Speaker Speaker1 = new Speaker
-        {
-            FirstName = "Vincent",
-            LastName = "Nyanga",
-            Email = "test@test.com",
-            Bio = "Software developer"
-        };
+        
 
         public static readonly Talk talk1 = new Talk
         {
             Title = "Domain Driven Design",
             Description = "An introduction to domain driven design",
             ScheduledDateTime = DateTimeOffset.UtcNow.AddDays(2),
-            Speakers = { Speaker1 }
+            
         };
 
 
@@ -31,7 +25,16 @@ namespace EventsApi.Web
             Title = "Developing a web API",
             Description = "An introduction web API",
             ScheduledDateTime = DateTimeOffset.UtcNow.AddDays(3),
-            Speakers = { Speaker1 }
+            
+        };
+
+        public static readonly Speaker Speaker1 = new Speaker
+        {
+            FirstName = "Vincent",
+            LastName = "Nyanga",
+            Email = "test@test.com",
+            Bio = "Software developer",
+            Talks = {talk1, talk2}
         };
 
 
@@ -56,8 +59,6 @@ namespace EventsApi.Web
         private static void PopulateTestData(AppDbContext dbContext)
         {
             dbContext.Speakers.Add(Speaker1);
-            dbContext.Talks.Add(talk1);
-            dbContext.Talks.Add(talk2);
             dbContext.SaveChanges();
         }
     }

@@ -1,4 +1,5 @@
-﻿using EventsApi.Core.Abstracts;
+﻿using System.Collections.Generic;
+using EventsApi.Core.Abstracts;
 
 namespace EventsApi.Core.Entities
 {
@@ -8,5 +9,6 @@ namespace EventsApi.Core.Entities
         public string LastName { get; set; }
         public string Email { get; set; }
         public string Bio { get; set; }
+        public ICollection<Talk> Talks { get; set; } = new List<Talk>();
     }
 }
