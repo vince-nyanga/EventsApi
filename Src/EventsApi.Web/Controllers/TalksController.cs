@@ -35,6 +35,9 @@ namespace EventsApi.Web.Controllers
             _logger.LogInformation("Getting all the talks");
 
             var talks = await _repository.ListAsync<Talk>();
+
+            _logger.LogInformation("{0} talks loaded", talks.Count);
+
             var talkDtos = _mapper.Map<List<TalkDto>>(talks);
 
             return Ok(talkDtos);
@@ -53,7 +56,7 @@ namespace EventsApi.Web.Controllers
                 return NotFound();
             }
 
-            return _mapper.Map<TalkDto>(talk);
+            return Ok(_mapper.Map<TalkDto>(talk));
         }
 
         [HttpPost]
