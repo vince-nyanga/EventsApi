@@ -22,24 +22,13 @@ namespace EventsApi.Infrastracture.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Bio")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Email")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("FirstName")
+                    b.Property<string>("Name")
                         .HasColumnType("TEXT");
-
-                    b.Property<string>("LastName")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int?>("TalkId")
-                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("TalkId");
 
                     b.ToTable("Speakers");
                 });
@@ -56,19 +45,24 @@ namespace EventsApi.Infrastracture.Data.Migrations
                     b.Property<DateTimeOffset>("ScheduledDateTime")
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("SpeakerId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Title")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("SpeakerId");
+
                     b.ToTable("Talks");
                 });
 
-            modelBuilder.Entity("EventsApi.Core.Entities.Speaker", b =>
+            modelBuilder.Entity("EventsApi.Core.Entities.Talk", b =>
                 {
-                    b.HasOne("EventsApi.Core.Entities.Talk", null)
-                        .WithMany("Speakers")
-                        .HasForeignKey("TalkId");
+                    b.HasOne("EventsApi.Core.Entities.Speaker", "Speaker")
+                        .WithMany()
+                        .HasForeignKey("SpeakerId");
                 });
 #pragma warning restore 612, 618
         }

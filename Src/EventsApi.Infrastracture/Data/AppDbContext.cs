@@ -23,6 +23,7 @@ namespace EventsApi.Infrastracture.Data
         public DbSet<Talk> Talks { get; set; }
         public DbSet<Speaker> Speakers { get; set; }
 
+      
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {

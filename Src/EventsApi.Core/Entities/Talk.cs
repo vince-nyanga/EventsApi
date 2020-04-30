@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using EventsApi.Core.Abstracts;
 using EventsApi.Core.Events;
 
@@ -10,11 +9,12 @@ namespace EventsApi.Core.Entities
         public string Title { get; set; }
         public string Description { get; set; }
         public DateTimeOffset ScheduledDateTime { get; set; }
-        public List<Speaker> Speakers { get; set; } = new List<Speaker>();
+
+        public Speaker Speaker { get; set; }
 
         public void AddSpeaker(Speaker speaker)
         {
-            Speakers.Add(speaker);
+            Speaker = speaker;
             Events.Add(new TalkSpeakerAddedEvent(this, speaker));
         }
     }

@@ -89,6 +89,8 @@ namespace EventsApi.Web.Controllers
                 return NotFound();
             }
 
+            
+
             talkEntity.Title = talk.Title;
             talkEntity.Description = talk.Description;
             talkEntity.ScheduledDateTime = talk.ScheduledDateTime;
