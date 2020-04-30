@@ -16,6 +16,12 @@ namespace EventsApi.Web
             Title = "Domain Driven Design",
             Description = "An introduction to domain driven design",
             ScheduledDateTime = DateTimeOffset.UtcNow.AddDays(2),
+
+            Speaker = new Speaker
+            {
+                Name = "Test Speaker",
+                Email = "test1@test.com"
+            }
             
         };
 
@@ -25,19 +31,16 @@ namespace EventsApi.Web
             Title = "Developing a web API",
             Description = "An introduction web API",
             ScheduledDateTime = DateTimeOffset.UtcNow.AddDays(3),
-            
+
+            Speaker = new Speaker
+            {
+                Name = "Awesome Speaker",
+                Email = "test2@test.com"
+            }
+
         };
 
-        public static readonly Speaker Speaker1 = new Speaker
-        {
-            FirstName = "Vincent",
-            LastName = "Nyanga",
-            Email = "test@test.com",
-            Bio = "Software developer",
-            Talks = {talk1, talk2}
-        };
-
-
+       
         public static void Initialize(IServiceProvider serviceProvider)
         {
             using (var dbContext = new AppDbContext(
@@ -58,7 +61,9 @@ namespace EventsApi.Web
 
         private static void PopulateTestData(AppDbContext dbContext)
         {
-            dbContext.Speakers.Add(Speaker1);
+            dbContext.Talks.Add(talk1);
+            dbContext.Talks.Add(talk2);
+
             dbContext.SaveChanges();
         }
     }

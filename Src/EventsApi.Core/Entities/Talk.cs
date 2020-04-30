@@ -10,10 +10,8 @@ namespace EventsApi.Core.Entities
         public string Description { get; set; }
         public DateTimeOffset ScheduledDateTime { get; set; }
 
-        public int SpeakerId { get; set; }
         public Speaker Speaker { get; set; }
 
-        
         public void AddSpeaker(Speaker speaker)
         {
             Speaker = speaker;

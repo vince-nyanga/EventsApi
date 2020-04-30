@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EventsApi.Infrastracture.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20200430052659_Initial")]
+    [Migration("20200430054808_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,16 +24,10 @@ namespace EventsApi.Infrastracture.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Bio")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Email")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("FirstName")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("LastName")
+                    b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -53,7 +47,7 @@ namespace EventsApi.Infrastracture.Data.Migrations
                     b.Property<DateTimeOffset>("ScheduledDateTime")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("SpeakerId")
+                    b.Property<int?>("SpeakerId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Title")
@@ -69,10 +63,8 @@ namespace EventsApi.Infrastracture.Data.Migrations
             modelBuilder.Entity("EventsApi.Core.Entities.Talk", b =>
                 {
                     b.HasOne("EventsApi.Core.Entities.Speaker", "Speaker")
-                        .WithMany("Talks")
-                        .HasForeignKey("SpeakerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany()
+                        .HasForeignKey("SpeakerId");
                 });
 #pragma warning restore 612, 618
         }

@@ -23,14 +23,14 @@ namespace EventsApi.UnitTests.Core.Entities
 
             var speaker = new Speaker
             {
-                FirstName = "name",
-                LastName = "last",
+                Name = "Awesome Speaker",
                 Email = "email@email.com"
             };
             // Act
             talk.AddSpeaker(speaker);
 
             // Assert
+            talk.Speaker.Should().NotBeNull();
             talk.Events.Should().NotBeEmpty();
             talk.Events[0].Should().BeOfType(typeof(TalkSpeakerAddedEvent));
             

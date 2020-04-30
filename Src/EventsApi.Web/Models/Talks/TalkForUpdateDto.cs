@@ -11,5 +11,6 @@ namespace EventsApi.Web.Models.Talks
         public string Description { get; set; }
         [Required]
         public DateTimeOffset ScheduledDateTime { get; set; }
+
     }
 }

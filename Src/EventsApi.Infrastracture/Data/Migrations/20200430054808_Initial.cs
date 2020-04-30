@@ -13,10 +13,8 @@ namespace EventsApi.Infrastracture.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    FirstName = table.Column<string>(nullable: true),
-                    LastName = table.Column<string>(nullable: true),
-                    Email = table.Column<string>(nullable: true),
-                    Bio = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(nullable: true),
+                    Email = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -32,7 +30,7 @@ namespace EventsApi.Infrastracture.Data.Migrations
                     Title = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
                     ScheduledDateTime = table.Column<DateTimeOffset>(nullable: false),
-                    SpeakerId = table.Column<int>(nullable: false)
+                    SpeakerId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -42,7 +40,7 @@ namespace EventsApi.Infrastracture.Data.Migrations
                         column: x => x.SpeakerId,
                         principalTable: "Speakers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
