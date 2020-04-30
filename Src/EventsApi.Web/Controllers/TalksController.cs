@@ -36,7 +36,7 @@ namespace EventsApi.Web.Controllers
 
             var talks = await _repository.ListAsync<Talk>();
 
-            _logger.LogInformation("{0} talks loaded", talks.Count);
+            _logger.LogInformation("{Total} talks loaded", talks.Count);
 
             var talkDtos = _mapper.Map<List<TalkDto>>(talks);
 
@@ -52,7 +52,7 @@ namespace EventsApi.Web.Controllers
 
             if (talk == null)
             {
-                _logger.LogInformation("Talk with id {0} does not exist", id);
+                _logger.LogInformation("Talk with id {Id} does not exist", id);
                 return NotFound();
             }
 
@@ -64,13 +64,13 @@ namespace EventsApi.Web.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<ActionResult<TalkDto>> Post([FromBody] TalkForUpdateDto talk)
         {
-            _logger.LogInformation("Creating new talk");
+            _logger.LogInformation("Creating new talk: {Talk}", talk);
 
             var talkEntity = _mapper.Map<Talk>(talk);
 
             var result = await _repository.AddAsync(talkEntity);
 
-            _logger.LogInformation("Talk created with id {0}", result.Id);
+            _logger.LogInformation("Talk created with id {Id}", result.Id);
 
             return CreatedAtAction(
                 nameof(Get),
@@ -83,12 +83,12 @@ namespace EventsApi.Web.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> Put(int id,[FromBody] TalkForUpdateDto talk)
         {
-            _logger.LogInformation("Updating talk with id {0}", id);
+            _logger.LogInformation("Updating talk {Id} with data {Talk}", id, talk);
 
             var talkEntity = await _repository.GetByIdAsync<Talk>(id);
             if (talkEntity  == null)
             {
-                _logger.LogInformation("Talk with id {0} does not exist", id);
+                _logger.LogInformation("Talk with id {Id} does not exist", id);
                 return NotFound();
             }
 
@@ -100,7 +100,7 @@ namespace EventsApi.Web.Controllers
 
             await _repository.UpdateAsync(talkEntity);
 
-            _logger.LogInformation("Talk with id {0} successfully updated", id);
+            _logger.LogInformation("Talk with id {Id} successfully updated", id);
 
             return NoContent();
         }
@@ -112,13 +112,13 @@ namespace EventsApi.Web.Controllers
         public async Task<ActionResult> Patch(int id,
             [FromBody]JsonPatchDocument<TalkForUpdateDto> patchDocument)
         {
-            _logger.LogInformation("Updating talk with id {0}", id);
+            _logger.LogInformation("Updating talk with id {Id}", id);
 
             var talkEntity = await _repository.GetByIdAsync<Talk>(id);
 
             if (talkEntity == null)
             {
-                _logger.LogInformation("Talk with id {0} does not exist", id);
+                _logger.LogInformation("Talk with id {Id} does not exist", id);
                 return NotFound();
             }
 
@@ -137,7 +137,8 @@ namespace EventsApi.Web.Controllers
 
             await _repository.UpdateAsync(talkEntity);
 
-            _logger.LogInformation("Talk with id {0} was successfully updated", id);
+            _logger.LogInformation("Talk with id {Id} was successfully updated", id);
+
             return NoContent();
         }
 
@@ -147,13 +148,13 @@ namespace EventsApi.Web.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> Delete(int id)
         {
-            _logger.LogInformation("Deleting talk with id {0}", id);
+            _logger.LogInformation("Deleting talk with id {Id}", id);
 
             var talkEntity = await _repository.GetByIdAsync<Talk>(id);
 
             if (talkEntity == null)
             {
-                _logger.LogInformation("Talk with id {0} does not exist", id);
+                _logger.LogInformation("Talk with id {Id} does not exist", id);
                 return NotFound();
             }
 
