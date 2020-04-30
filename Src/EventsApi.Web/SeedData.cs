@@ -61,6 +61,13 @@ namespace EventsApi.Web
 
         private static void PopulateTestData(AppDbContext dbContext)
         {
+            foreach (var item in dbContext.Talks)
+            {
+                dbContext.Remove(item);
+            }
+
+            dbContext.SaveChanges();
+
             dbContext.Talks.Add(talk1);
             dbContext.Talks.Add(talk2);
 
