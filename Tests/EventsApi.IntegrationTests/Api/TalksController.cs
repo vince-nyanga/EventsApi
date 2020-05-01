@@ -171,6 +171,7 @@ namespace EventsApi.IntegrationTests.Api
 
             response.EnsureSuccessStatusCode();
             response.StatusCode.Should().Be(StatusCodes.Status201Created);
+            response.Headers.Location.Should().NotBeNull();
 
             var stringResponse = await response.Content.ReadAsStringAsync();
             var result = JsonConvert.DeserializeObject<TalkDto>(stringResponse);
