@@ -64,7 +64,7 @@ namespace EventsApi.Web.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<ActionResult<TalkDto>> Post([FromBody] TalkForUpdateDto talk)
         {
-            _logger.LogInformation("Creating new talk: {Talk}", talk);
+            _logger.LogInformation("Creating new talk: {@Talk}", talk);
 
             var talkEntity = _mapper.Map<Talk>(talk);
 
@@ -83,7 +83,7 @@ namespace EventsApi.Web.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> Put(int id,[FromBody] TalkForUpdateDto talk)
         {
-            _logger.LogInformation("Updating talk {Id} with data {Talk}", id, talk);
+            _logger.LogInformation("Updating talk {Id} with data {@Talk}", id, talk);
 
             var talkEntity = await _repository.GetByIdAsync<Talk>(id);
             if (talkEntity  == null)
