@@ -114,7 +114,7 @@ namespace EventsApi.IntegrationTests.Api
         }
 
         [Fact]
-        public async Task Put_ShouldReturnNotFoundForInvalidId()
+        public async Task Put_ShouldReturnNotFoundGivenInvalidId()
         {
             var talk = new TalkForUpdateDto
             {
@@ -178,7 +178,7 @@ namespace EventsApi.IntegrationTests.Api
         }
 
         [Fact]
-        public async Task Post_ShouldUpdateReturnBadRequestIfValidationFails()
+        public async Task Post_ShouldReturnBadRequestGivenInvalidInput()
         {
             var talk = new TalkForUpdateDto
             {
