@@ -12,7 +12,8 @@ using Xunit;
 
 namespace EventsApi.IntegrationTests.Api
 {
-    public class TalksController : IClassFixture<CustomWebApplicationFactory<Startup>>
+    public class TalksController
+        : IClassFixture<CustomWebApplicationFactory<Startup>>
     {
         private readonly HttpClient _client;
 
@@ -29,7 +30,8 @@ namespace EventsApi.IntegrationTests.Api
             response.EnsureSuccessStatusCode();
 
             var stringResponse = await response.Content.ReadAsStringAsync();
-            var result = JsonConvert.DeserializeObject<IEnumerable<TalkDto>>(stringResponse);
+            var result = JsonConvert
+                .DeserializeObject<IEnumerable<TalkDto>>(stringResponse);
 
             result.Should().HaveCount(2);
         }
@@ -70,7 +72,8 @@ namespace EventsApi.IntegrationTests.Api
             response.EnsureSuccessStatusCode();
 
             var stringResponse = await response.Content.ReadAsStringAsync();
-            var result = JsonConvert.DeserializeObject<IEnumerable<TalkDto>>(stringResponse);
+            var result = JsonConvert
+                .DeserializeObject<IEnumerable<TalkDto>>(stringResponse);
 
             result.Should().HaveCount(1);
         }
