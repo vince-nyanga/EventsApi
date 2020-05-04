@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EventsApi.Infrastracture.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20200430054808_Initial")]
+    [Migration("20200504103718_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -30,7 +30,12 @@ namespace EventsApi.Infrastracture.Data.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("TalkId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("TalkId");
 
                     b.ToTable("Speakers");
                 });
@@ -47,24 +52,19 @@ namespace EventsApi.Infrastracture.Data.Migrations
                     b.Property<DateTimeOffset>("ScheduledDateTime")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("SpeakerId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("Title")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SpeakerId");
-
                     b.ToTable("Talks");
                 });
 
-            modelBuilder.Entity("EventsApi.Core.Entities.Talk", b =>
+            modelBuilder.Entity("EventsApi.Core.Entities.Speaker", b =>
                 {
-                    b.HasOne("EventsApi.Core.Entities.Speaker", "Speaker")
-                        .WithMany()
-                        .HasForeignKey("SpeakerId");
+                    b.HasOne("EventsApi.Core.Entities.Talk", null)
+                        .WithMany("Speakers")
+                        .HasForeignKey("TalkId");
                 });
 #pragma warning restore 612, 618
         }

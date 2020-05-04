@@ -20,7 +20,7 @@ namespace EventsApi.Infrastracture.Data
         public async Task<T> AddAsync<T>(T entity) where T : BaseEntity
         {
             await _dbContext.Set<T>().AddAsync(entity);
-            await _dbContext.SaveChangesAsync();
+            await SaveChanges();
 
             return entity;
         }
@@ -28,7 +28,7 @@ namespace EventsApi.Infrastracture.Data
         public async Task DeleteAsync<T>(T entity) where T : BaseEntity
         {
              _dbContext.Set<T>().Remove(entity);
-            await _dbContext.SaveChangesAsync();
+            await SaveChanges();
         }
 
         public Task<T> GetByIdAsync<T>(int id) where T : BaseEntity
@@ -36,15 +36,30 @@ namespace EventsApi.Infrastracture.Data
             return _dbContext.Set<T>().SingleOrDefaultAsync(e => e.Id == id);
         }
 
-        public Task<List<T>> ListAsync<T>() where T : BaseEntity
+        public async Task<IReadOnlyList<T>> ListAsync<T>() where T : BaseEntity
         {
-            return _dbContext.Set<T>().ToListAsync();
+            return await _dbContext.Set<T>().ToListAsync();
+        }
+
+        public async Task<IReadOnlyList<T>> ListAsync<T>(ISpecification<T> spec) where T : BaseEntity
+        {
+            return await ApplySpecification(spec).ToListAsync();
+        }
+
+        public async Task SaveChanges()
+        {
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task UpdateAsync<T>(T entity) where T : BaseEntity
         {
             _dbContext.Entry(entity).State = EntityState.Modified;
-            await _dbContext.SaveChangesAsync();
+            await SaveChanges();
+        }
+
+        private IQueryable<T> ApplySpecification<T>(ISpecification<T> spec) where T : BaseEntity
+        {
+            return SpecificationEvaluator<T>.GetQuery(_dbContext.Set<T>().AsQueryable(), spec);
         }
     }
 }

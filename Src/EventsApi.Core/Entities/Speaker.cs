@@ -6,5 +6,6 @@ namespace EventsApi.Core.Entities
     {
         public string Name { get; set; }
         public string Email { get; set; }
+        public int TalkId { get; private set; }
     }
 }

@@ -31,6 +31,7 @@ namespace EventsApi.UnitTests.Web.Controllers
             var mockMapper = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile(new TalkProfile());
+                cfg.AddProfile(new SpeakerProfile());
             });
 
             mockRepository = fixture.Freeze<Mock<IRepository>>();
