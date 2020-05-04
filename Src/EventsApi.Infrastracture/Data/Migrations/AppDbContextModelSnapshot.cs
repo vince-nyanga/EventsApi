@@ -28,7 +28,12 @@ namespace EventsApi.Infrastracture.Data.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("TalkId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("TalkId");
 
                     b.ToTable("Speakers");
                 });
@@ -45,24 +50,19 @@ namespace EventsApi.Infrastracture.Data.Migrations
                     b.Property<DateTimeOffset>("ScheduledDateTime")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("SpeakerId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("Title")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SpeakerId");
-
                     b.ToTable("Talks");
                 });
 
-            modelBuilder.Entity("EventsApi.Core.Entities.Talk", b =>
+            modelBuilder.Entity("EventsApi.Core.Entities.Speaker", b =>
                 {
-                    b.HasOne("EventsApi.Core.Entities.Speaker", "Speaker")
-                        .WithMany()
-                        .HasForeignKey("SpeakerId");
+                    b.HasOne("EventsApi.Core.Entities.Talk", null)
+                        .WithMany("Speakers")
+                        .HasForeignKey("TalkId");
                 });
 #pragma warning restore 612, 618
         }

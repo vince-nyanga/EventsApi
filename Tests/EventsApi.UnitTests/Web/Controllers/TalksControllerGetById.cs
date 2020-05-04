@@ -7,6 +7,8 @@ using EventsApi.Web.Controllers;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using EventsApi.Web.Models.Talks;
+using EventsApi.Core.Specifications;
+using System.Collections.Generic;
 
 namespace EventsApi.UnitTests.Web.Controllers
 {
@@ -19,8 +21,10 @@ namespace EventsApi.UnitTests.Web.Controllers
         {
             // Arrange
             var sut = fixture.Create<TalksController>();
-            mockRepository.Setup(r => r.GetByIdAsync<Talk>(It.IsAny<int>()))
-                .Returns(Task.FromResult(fixture.Create<Talk>()));
+            IReadOnlyList<Talk> talks = new List<Talk> { fixture.Create<Talk>() };
+
+            mockRepository.Setup(r => r.ListAsync(It.IsAny<TalkWithSpeakersSpecification>()))
+                .Returns(Task.FromResult(talks));
 
             // Act
             var response = await sut.Get(1);

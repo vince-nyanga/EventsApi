@@ -9,6 +9,10 @@
     <Folder Include="Interfaces\" />
     <Folder Include="Entities\" />
     <Folder Include="Events\" />
+    <Folder Include="Helpers\" />
+    <Folder Include="Helpers\Query\" />
+    <Folder Include="Extensions\" />
+    <Folder Include="Specifications\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MediatR" Version="8.0.1" />

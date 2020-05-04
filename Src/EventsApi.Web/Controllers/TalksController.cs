@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
+using EventsApi.Core.Specifications;
 
 namespace EventsApi.Web.Controllers
 {
@@ -30,15 +31,15 @@ namespace EventsApi.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<TalkDto>>> Get()
+        public async Task<ActionResult<IReadOnlyList<TalkDto>>> Get()
         {
             _logger.LogInformation("Getting all the talks");
 
-            var talks = await _repository.ListAsync<Talk>();
+            var talks = await _repository.ListAsync(new TalksWithSpeakersSpecification());
 
             _logger.LogInformation("{Total} talks loaded", talks.Count);
 
-            var talkDtos = _mapper.Map<List<TalkDto>>(talks);
+            var talkDtos = _mapper.Map<IReadOnlyList<TalkDto>>(talks);
 
             return Ok(talkDtos);
         }
@@ -48,15 +49,16 @@ namespace EventsApi.Web.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<TalkDto>> Get(int id)
         {
-            var talk = await _repository.GetByIdAsync<Talk>(id);
+            _logger.LogInformation("Getting talk with id {TalkId}", id);
+            var talks = await _repository.ListAsync<Talk>(new TalkWithSpeakersSpecification(id));
 
-            if (talk == null)
+            if (talks.Count == 0)
             {
-                _logger.LogInformation("Talk with id {Id} does not exist", id);
+                _logger.LogInformation("Talk with id {TalkID} does not exist", id);
                 return NotFound();
             }
 
-            return Ok(_mapper.Map<TalkDto>(talk));
+            return Ok(_mapper.Map<TalkDto>(talks[0]));
         }
 
         [HttpPost]

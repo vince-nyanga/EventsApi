@@ -17,10 +17,13 @@ namespace EventsApi.Web
             Description = "An introduction to domain driven design",
             ScheduledDateTime = DateTimeOffset.UtcNow.AddDays(2),
 
-            Speaker = new Speaker
+            Speakers =
             {
-                Name = "Test Speaker",
-                Email = "test1@test.com"
+                new Speaker
+                {
+                    Name = "Test Speaker",
+                    Email = "test1@test.com"
+                }
             }
             
         };
@@ -32,10 +35,13 @@ namespace EventsApi.Web
             Description = "An introduction web API",
             ScheduledDateTime = DateTimeOffset.UtcNow.AddDays(3),
 
-            Speaker = new Speaker
+            Speakers =
             {
-                Name = "Awesome Speaker",
-                Email = "test2@test.com"
+                new Speaker
+                {
+                    Name = "Awesome Speaker",
+                    Email = "test2@test.com"
+                }
             }
 
         };

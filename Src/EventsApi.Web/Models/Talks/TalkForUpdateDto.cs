@@ -7,8 +7,10 @@ namespace EventsApi.Web.Models.Talks
     {
         [Required]
         public string Title { get; set; }
+
         [Required]
         public string Description { get; set; }
+
         [Required]
         public DateTimeOffset ScheduledDateTime { get; set; }
 

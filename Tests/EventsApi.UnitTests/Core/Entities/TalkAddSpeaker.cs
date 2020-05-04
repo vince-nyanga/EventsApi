@@ -30,7 +30,7 @@ namespace EventsApi.UnitTests.Core.Entities
             talk.AddSpeaker(speaker);
 
             // Assert
-            talk.Speaker.Should().NotBeNull();
+            talk.Speakers.Should().NotBeEmpty();
             talk.Events.Should().NotBeEmpty();
             talk.Events[0].Should().BeOfType(typeof(TalkSpeakerAddedEvent));
             
