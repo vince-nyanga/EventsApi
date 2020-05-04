@@ -26,4 +26,4 @@ steps:
       displayName: "Test"
       inputs:
         command: test
-        arguments: '--configuration $(buildConfiguration)'
+        arguments: '--configuration $(buildConfiguration) --collect "Code coverage"'
