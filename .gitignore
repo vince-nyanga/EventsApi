@@ -260,6 +260,8 @@ paket-files/
 *.sqlite-wal
 *.sqlite-shm
 
+**/*.cobertura.xml
+
 # Nuget files
 DeploymentSettings.props
 Directory.Build.props
