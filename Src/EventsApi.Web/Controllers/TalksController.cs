@@ -151,9 +151,15 @@ namespace EventsApi.Web.Controllers
 
             patchDocument.ApplyTo(talkToPatch, ModelState);
 
-            if (!ModelState.IsValid)
+            
+            //if (!ModelState.IsValid) // ModelState is never invalid no matter the op
+            //{
+            //    return BadRequest(ModelState);
+            //}
+
+            if (talkToPatch.Title == null || talkToPatch.Description == null)
             {
-                return BadRequest(ModelState);
+                return BadRequest();
             }
 
             talkEntity.Title = talkToPatch.Title;
