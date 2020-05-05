@@ -22,8 +22,7 @@ namespace EventsApi.Core.Entities
         public void RemoveSpeaker(Speaker speaker)
         {
             Speakers.Remove(speaker);
-
-            // TODO: Raise event
+            Events.Add(new TalkSpeakerRemovedEvent(this, speaker));
         }
     }
 }

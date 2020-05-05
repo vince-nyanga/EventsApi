@@ -31,11 +31,19 @@ namespace EventsApi.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IReadOnlyList<TalkDto>>> Get()
+        public async Task<ActionResult<IReadOnlyList<TalkDto>>> Get(bool includeSpeakers=false)
         {
             _logger.LogInformation("Getting all the talks");
 
-            var talks = await _repository.ListAsync(new TalksWithSpeakersSpecification());
+            IReadOnlyList<Talk> talks;
+            if (includeSpeakers)
+            {
+                talks = await _repository.ListAsync(new TalksWithSpeakersSpecification());
+            }
+            else
+            {
+                talks = await _repository.ListAsync<Talk>();
+            }
 
             _logger.LogInformation("{Total} talks loaded", talks.Count);
 
@@ -47,18 +55,33 @@ namespace EventsApi.Web.Controllers
         [HttpGet("{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<TalkDto>> Get(int id)
+        public async Task<ActionResult<TalkDto>> Get(int id, bool includeSpeakers=false)
         {
             _logger.LogInformation("Getting talk with id {TalkId}", id);
-            var talks = await _repository.ListAsync<Talk>(new TalkWithSpeakersSpecification(id));
+            Talk talk;
+            if (includeSpeakers)
+            {
+                var talks = await _repository.ListAsync(new TalkWithSpeakersSpecification(id));
 
-            if (talks.Count == 0)
+                if (talks.Count == 0)
+                {
+                    _logger.LogInformation("Talk with id {TalkID} does not exist", id);
+                    return NotFound();
+                }
+                talk = talks[0];
+            }
+            else
+            {
+                talk = await _repository.GetByIdAsync<Talk>(id);
+            }
+
+            if (talk == null)
             {
                 _logger.LogInformation("Talk with id {TalkID} does not exist", id);
                 return NotFound();
             }
 
-            return Ok(_mapper.Map<TalkDto>(talks[0]));
+            return Ok(_mapper.Map<TalkDto>(talk));
         }
 
         [HttpPost]

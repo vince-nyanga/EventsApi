@@ -1,5 +1,4 @@
 ﻿using NUnit.Framework;
-using AutoFixture;
 using FluentAssertions;
 using EventsApi.Core.Entities;
 using System;
@@ -14,7 +13,7 @@ namespace EventsApi.UnitTests.Core.Entities
         public void ShouldRaiseTalkSpeakerAddedEvent()
         {
             // Arrange
-            var talk = new Talk
+            var sut = new Talk
             {
                 Description = "my talk",
                 Title = "my talk",
@@ -27,12 +26,12 @@ namespace EventsApi.UnitTests.Core.Entities
                 Email = "email@email.com"
             };
             // Act
-            talk.AddSpeaker(speaker);
+            sut.AddSpeaker(speaker);
 
             // Assert
-            talk.Speakers.Should().NotBeEmpty();
-            talk.Events.Should().NotBeEmpty();
-            talk.Events[0].Should().BeOfType(typeof(TalkSpeakerAddedEvent));
+            sut.Speakers.Should().NotBeEmpty();
+            sut.Events.Should().NotBeEmpty();
+            sut.Events[0].Should().BeOfType(typeof(TalkSpeakerAddedEvent));
             
         }
     }

@@ -11,7 +11,7 @@ using NUnit.Framework;
 
 namespace EventsApi.UnitTests.Web.Controllers
 {
-    public class TalksControllerPost : BaseTalksControllerTest
+    public class TalksControllerPost : BaseControllerTest
     {
         [Test]
         public async Task ShouldReturnCreatedTalk()

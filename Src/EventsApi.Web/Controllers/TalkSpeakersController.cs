@@ -38,21 +38,18 @@ namespace EventsApi.Web.Controllers
         {
             _logger.LogInformation("Getting talk with id {TalkId}", talkId);
 
-            var talk = await _repository.GetByIdAsync<Talk>(talkId);
-
-            if (talk == null)
+            var talks = await _repository.ListAsync(new TalkWithSpeakersSpecification(talkId));
+            if (talks.Count == 0)
             {
                 _logger.LogInformation("Talk with id {TalkId} does not exist", talkId);
                 return NotFound();
             }
 
-            _logger.LogInformation("Getting speakers for talk with id {TalkId}", talkId);
+            var talk = talks[0];
 
-            var speakers = await _repository.ListAsync(new SpeakersForTalkSpecification(talkId));
+            _logger.LogInformation("{TotalSpeakers} speakers found", talk.Speakers.Count);
 
-            _logger.LogInformation("{TotalSpeakers} speakers found", speakers.Count);
-
-            var speakerDto = _mapper.Map<IReadOnlyList<SpeakerDto>>(speakers);
+            var speakerDto = _mapper.Map<IReadOnlyList<SpeakerDto>>(talk.Speakers);
 
             return Ok(speakerDto);
         }
