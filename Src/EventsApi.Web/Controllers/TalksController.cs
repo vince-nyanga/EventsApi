@@ -151,17 +151,11 @@ namespace EventsApi.Web.Controllers
 
             patchDocument.ApplyTo(talkToPatch, ModelState);
 
-            
-            //if (!ModelState.IsValid) // ModelState is never invalid no matter the op
-            //{
-            //    return BadRequest(ModelState);
-            //}
-
-            if (talkToPatch.Title == null || talkToPatch.Description == null)
+            if (!TryValidateModel(talkToPatch))
             {
-                return BadRequest();
+                return BadRequest(ModelState);
             }
-
+            
             talkEntity.Title = talkToPatch.Title;
             talkEntity.Description = talkToPatch.Description;
             talkEntity.ScheduledDateTime = talkToPatch.ScheduledDateTime;
