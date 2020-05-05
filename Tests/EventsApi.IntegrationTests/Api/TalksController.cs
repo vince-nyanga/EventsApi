@@ -7,6 +7,7 @@ using EventsApi.Web;
 using EventsApi.Web.Models.Talks;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.JsonPatch;
 using Newtonsoft.Json;
 using Xunit;
 
@@ -23,7 +24,7 @@ namespace EventsApi.IntegrationTests.Api
         }
 
         [Fact]
-        public async Task Get_ShouldReturnTalks()
+        public async Task Get_ShouldReturnTalksWithoutSpeakers()
         {
             var response = await _client.GetAsync("/api/talks");
 
@@ -31,13 +32,30 @@ namespace EventsApi.IntegrationTests.Api
 
             var stringResponse = await response.Content.ReadAsStringAsync();
             var result = JsonConvert
-                .DeserializeObject<IEnumerable<TalkDto>>(stringResponse);
+                .DeserializeObject<List<TalkDto>>(stringResponse);
 
-            result.Should().HaveCount(2);
+            result.Should().NotBeNullOrEmpty();
+            result[0].Speakers.Should().BeNullOrEmpty();
+        }
+
+
+        [Fact]
+        public async Task Get_ShouldReturnTalksWithSpeakers()
+        {
+            var response = await _client.GetAsync("/api/talks?includeSpeakers=true");
+
+            response.EnsureSuccessStatusCode();
+
+            var stringResponse = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert
+                .DeserializeObject<List<TalkDto>>(stringResponse);
+
+            result.Should().NotBeNullOrEmpty();
+            result[0].Speakers.Should().NotBeNullOrEmpty();
         }
 
         [Fact]
-        public async Task GetById_ShouldReturnTalk()
+        public async Task GetById_ShouldReturnTalkWithoutSpeakers()
         {
             var response = await _client.GetAsync("/api/talks/1");
             response.EnsureSuccessStatusCode();
@@ -46,8 +64,20 @@ namespace EventsApi.IntegrationTests.Api
             var result = JsonConvert.DeserializeObject<TalkDto>(stringResponse);
 
             result.Should().NotBeNull();
-            result.Title.Should().Be(SeedData.talk1.Title);
-            result.Description.Should().Be(SeedData.talk1.Description);
+            result.Speakers.Should().BeNullOrEmpty();
+        }
+
+        [Fact]
+        public async Task GetById_ShouldReturnTalkWithSpeakers()
+        {
+            var response = await _client.GetAsync("/api/talks/1?includeSpeakers=true");
+            response.EnsureSuccessStatusCode();
+
+            var stringResponse = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<TalkDto>(stringResponse);
+
+            result.Should().NotBeNull();
+            result.Speakers.Should().NotBeNullOrEmpty();
         }
 
         [Fact]
@@ -61,7 +91,7 @@ namespace EventsApi.IntegrationTests.Api
         [Fact]
         public async Task Delete_ShouldDeleteTalk()
         {
-            var response = await _client.DeleteAsync("/api/talks/1");
+            var response = await _client.DeleteAsync("/api/talks/2");
             response.EnsureSuccessStatusCode();
 
             response.StatusCode.Should().Be(StatusCodes.Status204NoContent);
@@ -91,21 +121,21 @@ namespace EventsApi.IntegrationTests.Api
         {
             var talk = new TalkForUpdateDto
             {
-                Description = SeedData.talk2.Description,
+                Description = SeedData.talk1.Description,
                 Title = "Updated Description",
-                ScheduledDateTime = SeedData.talk2.ScheduledDateTime
+                ScheduledDateTime = SeedData.talk1.ScheduledDateTime
             };
             var jsonString = JsonConvert.SerializeObject(talk);
 
             var response = await _client
-                .PutAsync("/api/talks/2", new StringContent(
+                .PutAsync("/api/talks/1", new StringContent(
                     jsonString, Encoding.UTF8,
                     "application/json"));
 
             response.StatusCode.Should().Be(StatusCodes.Status204NoContent);
 
             // Verify
-            response = await _client.GetAsync("/api/talks/2");
+            response = await _client.GetAsync("/api/talks/1");
             response.EnsureSuccessStatusCode();
 
             var stringResponse = await response.Content.ReadAsStringAsync();
@@ -197,6 +227,65 @@ namespace EventsApi.IntegrationTests.Api
                     "application/json"));
 
             response.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
+        }
+
+        [Fact]
+        public async Task Patch_ShouldReturnNotFoundGivenInvalidId()
+        {
+            var patchDoc = new JsonPatchDocument<TalkForUpdateDto>();
+            patchDoc.Replace(t => t.Description, "Patched description");
+
+            var jsonString = JsonConvert.SerializeObject(patchDoc);
+
+            var response = await _client.PatchAsync("/api/talks/20", new StringContent(
+                jsonString,
+                Encoding.UTF8,
+                "application/json"));
+
+            response.StatusCode.Should().Be(StatusCodes.Status404NotFound);
+        }
+
+        [Fact]
+        public async Task Patch_ShouldReturnNotBadRequestGivenInvalidOperation()
+        {
+            var patchDoc = new JsonPatchDocument<TalkForUpdateDto>();
+            patchDoc.Remove(t => t.Title);
+
+            var jsonString = JsonConvert.SerializeObject(patchDoc);
+
+            var response = await _client.PatchAsync("/api/talks/1", new StringContent(
+                jsonString,
+                Encoding.UTF8,
+                "application/json"));
+
+            response.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
+        }
+
+        [Fact]
+        public async Task Patch_ShouldUpdateTalk()
+        {
+            var patchDoc = new JsonPatchDocument<TalkForUpdateDto>();
+            patchDoc.Replace(t => t.Title, "Patched Title");
+
+            var jsonString = JsonConvert.SerializeObject(patchDoc);
+
+            var response = await _client.PatchAsync("/api/talks/1", new StringContent(
+                jsonString,
+                Encoding.UTF8,
+                "application/json"));
+
+            response.StatusCode.Should().Be(StatusCodes.Status204NoContent);
+
+            // Verify
+            response = await _client.GetAsync("/api/talks/1");
+            response.EnsureSuccessStatusCode();
+
+            var stringResponse = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<TalkDto>(stringResponse);
+
+            result.Should().NotBeNull();
+            result.Title.Should().Be("Patched Title");
+
         }
 
     }
