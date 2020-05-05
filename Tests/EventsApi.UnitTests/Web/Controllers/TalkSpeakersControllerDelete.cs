@@ -36,7 +36,7 @@ namespace EventsApi.UnitTests.Web.Controllers
             var sut = fixture.Create<TalkSpeakersController>();
             var talk = fixture.Create<Talk>();
             talk.Speakers = new List<Speaker>();
-            IReadOnlyList<Talk> talks = new List<Talk> { };
+            IReadOnlyList<Talk> talks = new List<Talk> { talk };
 
             mockRepository.Setup(r => r.ListAsync(It.IsAny<TalkWithSpeakersSpecification>()))
                 .Returns(Task.FromResult(talks));
