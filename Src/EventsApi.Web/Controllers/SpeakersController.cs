@@ -1,9 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using AutoMapper;
 using EventsApi.Core.Entities;
 using EventsApi.Core.Interfaces;
-using EventsApi.Core.Specifications;
 using EventsApi.Web.Models.Speaker;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

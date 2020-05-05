@@ -10,7 +10,7 @@ using NUnit.Framework;
 
 namespace EventsApi.UnitTests.Web.Controllers
 {
-    public class TalksControllerPut : BaseTalksControllerTest
+    public class TalksControllerPut : BaseControllerTest
     {
         [Test]
         public async Task ShouldReturnNotFoundIfTaskIsNull()

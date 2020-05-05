@@ -11,12 +11,12 @@ using NUnit.Framework;
 namespace EventsApi.UnitTests.Web.Controllers
 {
     [TestFixture]
-    public abstract class BaseTalksControllerTest
+    public abstract class BaseControllerTest
     {
         protected IFixture fixture;
         protected Mock<IRepository> mockRepository;
 
-        public BaseTalksControllerTest()
+        public BaseControllerTest()
         {
             SetupFixture();
         }
@@ -37,6 +37,12 @@ namespace EventsApi.UnitTests.Web.Controllers
             mockRepository = fixture.Freeze<Mock<IRepository>>();
 
             fixture.Inject<IMapper>(mockMapper.CreateMapper());
+        }
+
+        [TearDown]
+        public void CleanUp()
+        {
+            mockRepository.Invocations.Clear();
         }
     }
 }
