@@ -246,7 +246,7 @@ namespace EventsApi.IntegrationTests.Api
         }
 
         [Fact]
-        public async Task Patch_ShouldReturnNotBadRequestGivenInvalidOperation()
+        public async Task Patch_ShouldReturnBadRequestGivenInvalidOperation()
         {
             var patchDoc = new JsonPatchDocument<TalkForUpdateDto>();
             patchDoc.Remove(t => t.Title);
